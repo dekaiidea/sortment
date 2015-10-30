@@ -17,7 +17,8 @@ int* hextent::dhtent(Mat &image, vector<int> p,double thresnum,int n,int Dvalue 
 	threshold(image, HTImg, thresnum, 255, CV_THRESH_BINARY);
 	if (n == 1)
 		HTImg = ~HTImg;
-	erode(HTImg, HTImg, cv::Mat(), cv::Point(-1, -1), 3);
+	/*Mat element = getStructuringElement(MORPH_RECT,Size(2,2));*/
+	erode(HTImg, HTImg, cv::Mat());
 	dilate(HTImg, HTImg, cv::Mat());
 	Mat AvgImg = HTImg(Range::all(), Range(1, 1));
 	reduce(HTImg, AvgImg, 1, CV_REDUCE_AVG);

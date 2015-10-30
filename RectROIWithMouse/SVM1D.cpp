@@ -149,7 +149,7 @@ void SVM1D::getsvm()
 				Tnum = Tnum - 3;
 			else
 				Tnum = Tnum + 3;
-		} while (Wnum[1] - Wnum[0]>Bnum[1] - Bnum[0] && Wnum[1]>Bnum[0]);
+		} while (Wnum[1] - Wnum[0]>=Bnum[1] - Bnum[0] && Wnum[1]>Bnum[0]);
 		cout << endl;
 		
 		if (2 * Bnum[0]<Wnum[0])
@@ -177,13 +177,16 @@ void SVM1D::getsvm()
 			{
 				OrStep = OrStep + Dstep;
 				threshold(histoImg, TempImg, OrStep, 255, CV_THRESH_BINARY);
+				/*Mat element = getStructuringElement(MORPH_RECT,Size(2,2));
+				erode(TempImg, TempImg, cv::Mat());
+				dilate(TempImg, TempImg, cv::Mat());*/
 				TempImg = ~TempImg;
 				findContours(TempImg, contours, hierarchy, RETR_TREE, CV_CHAIN_APPROX_SIMPLE);
-				for (size_t i = 0; i < contours.size(); i++)
+				for (size_t j = 0; j < contours.size(); j++)
 				{
-					double area = cv::contourArea(contours[i]);
+					double area = cv::contourArea(contours[j]);
 					pointSN.x = int(area);
-					pointSN.y = i;
+					pointSN.y = j;
 					SN.push_back(pointSN);
 				}
 				
@@ -202,12 +205,12 @@ void SVM1D::getsvm()
 					if (son >= 0)//父轮廓
 					{
 						int sonarea = 0;
-						for (size_t i = 0; i < contours.size(); i++)
+						for (size_t j = 0; j < contours.size(); j++)
 						{
-							if (hierarchy[i][3] == k)
-								sonarea = sonarea + contourArea(contours[i]);
+							if (hierarchy[j][3] == k&&contourArea(contours[j])>2)
+								sonarea = sonarea + contourArea(contours[j]);
 						}
-						if (100 * sonarea>maxPoint.x)
+						if (50 * sonarea>maxPoint.x)
 							Marknum++;
 					}
 						
@@ -215,7 +218,7 @@ void SVM1D::getsvm()
 				
 			}
 
-			if (Marknum >= 2)
+			if (Marknum >= 2)//缺陷点也可能偶然出现包含
 				cout << "该点是水渍2" << endl;
 			else
 				cout << "该点是缺陷2" << endl;
