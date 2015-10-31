@@ -9,7 +9,7 @@ hextent::hextent()
 hextent::~hextent()
 {
 }
-int* hextent::dhtent(Mat &image, vector<int> p,double thresnum,int n,int Dvalue )
+int* hextent::dhtent(Mat &image, Mat &Yimage, vector<int> p, double thresnum, int n, int Dvalue)
 {
 	Mat HTImg;
 	int* i;
@@ -17,14 +17,20 @@ int* hextent::dhtent(Mat &image, vector<int> p,double thresnum,int n,int Dvalue 
 	threshold(image, HTImg, thresnum, 255, CV_THRESH_BINARY);
 	if (n == 1)
 		HTImg = ~HTImg;
-	/*Mat element = getStructuringElement(MORPH_RECT,Size(2,2));*/
-	erode(HTImg, HTImg, cv::Mat());
-	dilate(HTImg, HTImg, cv::Mat());
-	Mat AvgImg = HTImg(Range::all(), Range(1, 1));
-	reduce(HTImg, AvgImg, 1, CV_REDUCE_AVG);
+	Mat element = getStructuringElement(MORPH_RECT,Size(1,2));
+	erode(HTImg, HTImg, element);
+	dilate(HTImg, HTImg, element);
+	Mat AvgImgx = HTImg(Range::all(), Range(1, 1));
+	Yimage = HTImg(Range(1, 1), Range::all());
+
+	reduce(HTImg, AvgImgx, 1, CV_REDUCE_AVG);
+	reduce(HTImg, Yimage, 0, CV_REDUCE_AVG);
+	erode(Yimage, Yimage, element);
+	dilate(Yimage, Yimage, element);
+
 
 	int k = HTImg.rows;
-	while (AvgImg.at<uchar>(Point(0, k-1)) != 0 && k > 1)
+	while (AvgImgx.at<uchar>(Point(0, k-1)) != 0 && k > 1)
 	{
 		k--;
 	}
@@ -35,14 +41,14 @@ int* hextent::dhtent(Mat &image, vector<int> p,double thresnum,int n,int Dvalue 
 	recttemp.y = k;
 	recttemp.width = 1;
 	recttemp.height = HTImg.rows-k;
-	rectangle(AvgImg, recttemp, Scalar(0), -1);
+	rectangle(AvgImgx, recttemp, Scalar(0), -1);
 
 	vector <int>().swap(p);
 	int mindataone = 0;
 	int maxdataone = 0;
 	for (int j = 0; j < HTImg.rows; j++)
 	{
-		int BV = AvgImg.at<uchar>(Point(0, j));
+		int BV = AvgImgx.at<uchar>(Point(0, j));
 		if (BV != 0)
 			p.push_back(j);
 	}

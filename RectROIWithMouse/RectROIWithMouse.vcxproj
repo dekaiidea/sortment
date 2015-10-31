@@ -72,11 +72,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="hextent.cpp" />
+    <ClCompile Include="Judgement.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SVM1D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hextent.h" />
+    <ClInclude Include="Judgement.h" />
     <ClInclude Include="SVM1D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

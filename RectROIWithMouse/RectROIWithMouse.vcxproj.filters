@@ -24,12 +24,18 @@
     <ClCompile Include="hextent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Judgement.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SVM1D.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="hextent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Judgement.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

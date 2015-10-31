@@ -11,7 +11,7 @@ using namespace std;
 class hextent
 {
 public:
-	int* dhtent(Mat &image, vector<int> p, double thresnum,int n = 0,int Dvalue = 0);
+	int* dhtent(Mat &image, Mat &Yimage,vector<int> p, double thresnum,int n = 0,int Dvalue = 0);
 	hextent();
 	~hextent();
 };
