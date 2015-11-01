@@ -242,7 +242,7 @@ int Judgement::JudgementYON(Mat &image,int n,int m)
 					int sonarea = 0;
 					for (size_t j = 0; j < contours.size(); j++)
 					{
-						if (hierarchy[j][3] == k&&contourArea(contours[j])>2)
+						if (hierarchy[j][3] == k&&contourArea(contours[j])>2.0)
 							sonarea = sonarea + contourArea(contours[j]);
 					}
 					if (50 * sonarea>maxPoint.x)//此处忽略一些偶然出现的中空点

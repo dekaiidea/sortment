@@ -15,18 +15,42 @@ int* hextent::dhtent(Mat &image, Mat &Yimage, vector<int> p, double thresnum, in
 	int* i;
 	i =  new int[2];
 	threshold(image, HTImg, thresnum, 255, CV_THRESH_BINARY);
+
+	vector<vector<cv::Point>> contours;
 	if (n == 1)
+	{
 		HTImg = ~HTImg;
-	Mat element = getStructuringElement(MORPH_RECT,Size(1,2));
+		cv::findContours(HTImg, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+
+		// 寻找最大连通域  
+		double maxArea = 0;
+		vector<cv::Point> maxContour;
+		for (size_t i = 0; i < contours.size(); i++)
+		{
+			double area = cv::contourArea(contours[i]);
+			if (area > maxArea)
+			{
+				maxArea = area;
+				maxContour = contours[i];
+			}
+		}
+		contours.push_back(maxContour);
+		Mat maxcontourImg(HTImg.rows , HTImg.cols , CV_8UC1, Scalar(0));
+		drawContours(maxcontourImg, contours, contours.size() - 1, Scalar(255), -1);
+		maxcontourImg.copyTo(HTImg);
+	}
+		
+	
+	/*Mat element = getStructuringElement(MORPH_RECT,Size(1,2));
 	erode(HTImg, HTImg, element);
-	dilate(HTImg, HTImg, element);
+	dilate(HTImg, HTImg, element);*/
 	Mat AvgImgx = HTImg(Range::all(), Range(1, 1));
 	Yimage = HTImg(Range(1, 1), Range::all());
 
 	reduce(HTImg, AvgImgx, 1, CV_REDUCE_AVG);
 	reduce(HTImg, Yimage, 0, CV_REDUCE_AVG);
-	erode(Yimage, Yimage, element);
-	dilate(Yimage, Yimage, element);
+	/*erode(Yimage, Yimage, element);
+	dilate(Yimage, Yimage, element);*/
 
 
 	int k = HTImg.rows;
@@ -34,7 +58,7 @@ int* hextent::dhtent(Mat &image, Mat &Yimage, vector<int> p, double thresnum, in
 	{
 		k--;
 	}
-	if (k < HTImg.rows -  Dvalue / 5)
+	if (k < HTImg.rows - Dvalue / 5 && Dvalue!=0)
 		k = HTImg.rows -  Dvalue / 5;
 	Rect recttemp;
 	recttemp.x = 0;

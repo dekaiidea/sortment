@@ -22,17 +22,17 @@ void SVM1D::getsvm()
 	Mat trainingDataMat;
 	int sum = 0;
 	double t = static_cast<double>(getTickCount());
-	for (int i = 1; i <= 12; i++)
+	for (int i = 9; i <= 9; i++)
 	{
 		stringstream strstr;
-		strstr <<"х╠ощ"<< i << ".png";
+		strstr <<"к╝ву"<< i << ".png";
 		Mat histoImg = imread(strstr.str());
 		cvtColor(histoImg, histoImg, CV_BGR2GRAY);
 
 		int n = 0;
-		for (int j = 0; j <= 4; j++)
+		for (int j = 0; j <= 0; j++)
 		{
-			for (int k = 0; k <= 4; k++)
+			for (int k = 0; k <= 0; k++)
 			{
 				Rect recttemp;
 				recttemp.x = j;
